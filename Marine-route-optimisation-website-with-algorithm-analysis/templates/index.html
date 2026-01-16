@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ship Route Finder</title>
+    <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Find the Shortest Ship Route</h1>
+        <form method="POST">
+            <label for="source">Source Port:</label>
+            <select name="source" id="source">
+                {% for port in ports %}
+                    <option value="{{ port }}" {% if port == request.form.get('source') %} selected {% endif %}>{{ port }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <label for="destination">Destination Port:</label>
+            <select name="destination" id="destination">
+                {% for port in ports %}
+                    <option value="{{ port }}" {% if port == request.form.get('destination') %} selected {% endif %}>{{ port }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <button type="submit">Find Route</button>
+        </form>
+
+        <div>
+            <!-- Render the map -->
+            {% if map_html %}
+                <div>{{ map_html | safe }}</div>
+            {% endif %}
+        </div>
+
+        <!-- Show best algorithm -->
+        {% if best_algorithm %}
+            <h2>{{ best_algorithm }}</h2>
+        {% endif %}
+
+        <!-- Show time taken and memory usage -->
+        {% if time_taken %}
+            <p style="padding-left: 25%;">{{ time_taken }}</p>
+        {% endif %}
+        {% if memory_used %}
+            <p style="padding-left: 25%;">{{ memory_used }}</p>
+        {% endif %}
+
+
+        <form method="GET" action="{{ url_for('analysis') }}">
+            <button type="submit" class="btn btn-primary">View Analysis</button>
+        </form>
+    </div>
+</body>
+</html>
