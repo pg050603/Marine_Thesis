@@ -1,0 +1,15 @@
+name_Simu = 'HV_NAIN'
+LonMin = -61.500 
+LonMax = -56.000 
+LatMin = 53.000 
+LatMax = 57.000 
+inc =  1.500 
+nodIni = 11502 
+nodEnd = 31100 
+Waves_HV_NAIN_2022-12-19%2022-12-21.nc
+time_res = 3 
+t_ini = 9 
+v0 = 16.100 
+WEN_form = 1 
+Lbp = 225 
+DWT = 8000 

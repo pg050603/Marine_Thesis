@@ -1,0 +1,19 @@
+              SIMROUTE report:     HV_NAIN
+=========================================================================
+
+Initial Velocity in knots = 16.1 
+WEN_form = 1 
+Departure:  Node =  11502  --  coordinates  (-57.0000,54.2750)
+Departure time (day-month-year hour:min): 19-12-2022 9:00
+Arrival:     Node =  31100  --  coordinates  (-61.0000,56.5000)
+Number of nodes: Nx=   222   Ny=   162   Nx*Ny= 35964   
+Geodetic Distance (in milles): 190.75
+ 
+========================================================================
+                                        Sailed hours    Sailed milles
+Route Optimized:                           12.57            194.97    
+Route Minimum Distance:                   12.64            194.01    
+Route Minimum Distance (without waves):    12.05            194.01    
+
+========================================================================
+

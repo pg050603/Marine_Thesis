@@ -1,0 +1,53 @@
+# Core data science
+pandas
+numpy
+scipy
+
+# Web scraping & HTTP
+requests
+beautifulsoup4
+lxml
+
+# Database
+sqlalchemy
+psycopg2-binary
+
+# Plotting & mapping
+matplotlib
+plotly
+Cartopy
+Shapely
+
+# Geospatial
+pyshp
+netCDF4
+cftime
+
+# Jupyter/IPython
+ipython
+ipykernel
+jupyter-client
+jupyter-core
+nbformat
+nbconvert
+
+# Development tools (optional, comment out if not needed)
+spyder
+spyder-kernels
+pylint
+autopep8
+flake8
+
+# Web framework (if needed)
+Flask
+Jinja2
+
+# Utilities
+python-dateutil
+pytz
+pyyaml
+cryptography
+certifi
+
+# Marine specific Modules
+copernicusmarine

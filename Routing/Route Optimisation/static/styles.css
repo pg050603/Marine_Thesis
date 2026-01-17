@@ -1,0 +1,177 @@
+/* General body styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-image: url('/static/bg.jpg'); /* Use the correct path to the image */
+    background-size: cover; /* Ensures the image covers the entire page */
+    background-position: center; /* Centers the image */
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* Container for all content */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading styles */
+h1, h2 {
+    text-align: center;
+    color: #4b89dc;
+    font-size: 32px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* Form Styling */
+form {
+    background-color: #fffcf9;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+/* Label Styling */
+label {
+    font-size: 18px;
+    color: #6a6a6a;
+    margin-bottom: 8px;
+    display: block;
+    font-weight: 500;
+}
+
+/* Select styling for source and destination ports */
+select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 18px;
+    border-radius: 10px;
+    border: 2px solid #f1c6d0;
+    font-size: 16px;
+    background-color: #fff6f4;
+    transition: border-color 0.3s ease;
+}
+
+select:hover {
+    border-color: #f7b7b2;
+}
+
+/* Submit Button Styling */
+button {
+    background-color: #ff6f61;
+    color: white;
+    border: none;
+    padding: 14px;
+    width: 100%;
+    border-radius: 12px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(255, 111, 97, 0.3);
+}
+
+button:hover {
+    background-color: #ff4b39;
+    box-shadow: 0 6px 15px rgba(255, 75, 56, 0.5);
+}
+
+/* Map section */
+div#map {
+    height: 400px;
+    margin-top: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Center the results (Time & Memory Usage Information) */
+.results {
+    text-align: center;
+    margin-top: 30px;
+    padding: 0 20px;
+}
+
+.results p {
+    font-size: 18px;
+    color: #5a5a5a;
+    margin: 10px 0;
+    text-align: center;  /* Ensure it's centered */
+}
+
+.results h2 {
+    font-size: 24px;
+    color: #ff6f61;
+    margin-bottom: 15px;
+}
+
+/* Analysis Graphs Styling */
+.analysis-graphs {
+    display: block;  /* Changed from flex to block */
+    margin: 30px 0;
+}
+
+.analysis-graphs .graph {
+    max-width: 800px;
+    width: 100%;
+    margin: 20px auto;  /* Centers the graph and adds space between them */
+}
+
+/* Time & Memory Usage text with centering */
+.time-memory-info {
+    display: block;
+    text-align: center;
+    font-size: 18px;
+    color: #6a6a6a;
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+
+/* For the best algorithm label */
+.best-algorithm-info {
+    text-align: center;
+    font-size: 20px;
+    color: #ff6f61;
+    margin-bottom: 20px;
+}
+
+/* Padding for the container to give more space for the graphs */
+.container {
+    padding: 30px 20px;
+}
+
+
+
+/* Analysis button styling */
+.btn-primary {
+    background-color: #4b89dc;
+    padding: 12px 24px;
+    border-radius: 12px;
+    color: white;
+    font-size: 18px;
+    border: none;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+    margin-top: 30px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #3973cc;
+}
+
+/* Footer (for any future additions like copyright) */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #f4f4f9;
+    color: #8e8e8e;
+    font-size: 14px;
+    margin-top: 40px;
+}
