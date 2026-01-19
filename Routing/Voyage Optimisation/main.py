@@ -123,8 +123,6 @@ def graph_factory(lon, lat, U, V, boat_avg_speed):
     else:
         edge_weights = get_weights(G_ocean_grid, lon, lat, U, V, boat_avg_speed)
         G_ocean_grid.es["weight"] = edge_weights
-        # with open(expected_path, 'wb') as weight_obj:
-        #     pickle.dump(edge_weights, weight_obj)
 
         return G_ocean_grid
 
@@ -295,43 +293,6 @@ def plot_matplot(lon, lat, U, V, xx, yy):
     plt.legend()
     return fig
 
-# def plot_matplot(lon, lat, U, V, xx, yy):
-#     """
-#     Generates result plot
-
-#     Parameters
-#     ----------
-#     lon: array
-#         1D array containing longitude points
-#     lat: array
-#         1D array containing latitude points
-#     U: array
-#         2D array containing x component of ocean current speeds [shape -> (len(lat), len(lon))]
-#     V: array
-#         2D array containing y component of ocean current speeds [shape -> (len(lat), len(lon))]
-#     """
-
-#     fig = plt.figure(figsize=(8, 12))
-#     ax = plt.axes(projection=ccrs.PlateCarree())
-#     ax.add_feature(cartopy.feature.OCEAN, zorder=0, facecolor=[0.0039, 0.996, 1])
-#     ax.add_feature(cartopy.feature.LAND, zorder=0, edgecolor='black', facecolor=[1, 0.498, 0.313], linewidth=0.5)
-
-#     dec = 5
-#     lon = lon[::dec]
-#     lat = lat[::dec]
-#     U = U[::dec, ::dec]
-#     V = V[::dec, ::dec]
-
-#     mymap=plt.streamplot(lon, lat, U, V, density=2, transform=ccrs.PlateCarree(), color=U, cmap='ocean', linewidth=0.5)
-#     ax.plot(xx, yy, 'k:', linewidth=2, label='Optimal Path')
-#     ax.scatter([xx[0]], [yy[0]], c='g', label='Start')
-#     ax.scatter([xx[-1]], [yy[-1]], c='b', label='End')
-    
-#     plt.legend()
-#     return fig
-
-################################## UI ##############################################
-
 def st_sidebar():
     boat_avg_speed = st.sidebar.number_input('Vessel Speed (m/s)', min_value=0.1, max_value=150.0, step=5.0, value=1.0)
 
@@ -359,7 +320,7 @@ def st_sidebar():
     return (s_lat, s_lon), (e_lat, e_lon), boat_avg_speed
 
 def st_ui():
-    st.write("# Welcome to the Ship-Route Optimization Daisi! 👋")
+    st.write("#Ship-Route Optimization")
     st.markdown(
         """
         When traveling on the surface of the Earth one cannot take a constant heading (an angle with respect to North) to travel the shortest route from point __A__ to __B__. \n

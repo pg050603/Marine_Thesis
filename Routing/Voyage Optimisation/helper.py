@@ -7,7 +7,7 @@ from global_land_mask import globe
 
 def shortest_path(g, src, target):
     """
-    Dijkstra's Algorithm
+    Implementation of Dijkstra's Algorithm
     """
     q = [(0, src, ())]
     visited, dist = set(), {src: 0.0}
