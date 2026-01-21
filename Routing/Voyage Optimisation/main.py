@@ -254,44 +254,60 @@ def sanitize(lon, lat, U, V):
     V = V[lat_ind]
 
     return lon, lat, U, V
-
 def plot_matplot(lon, lat, U, V, xx, yy):
     """
-    Generates result plot
-
-    Parameters
-    ----------
-    lon: array
-        1D array containing longitude points
-    lat: array
-        1D array containing latitude points
-    U: array
-        2D array containing x component of ocean current speeds [shape -> (len(lat), len(lon))]
-    V: array
-        2D array containing y component of ocean current speeds [shape -> (len(lat), len(lon))]
+    Generates result plot focused on the route region.
     """
 
-    fig, ax = plt.subplots()
-    m = Basemap(width=12000000,height=9000000,resolution='l')
+    all_lons = np.concatenate([lon, np.asarray(xx)])
+    all_lats = np.concatenate([lat, np.asarray(yy)])
+
+    margin = 5
+    llcrnrlon = float(all_lons.min() - margin)
+    urcrnrlon = float(all_lons.max() + margin)
+    llcrnrlat = float(all_lats.min() - margin)
+    urcrnrlat = float(all_lats.max() + margin)
+
+    fig, ax = plt.subplots(figsize=(12, 6), dpi=150)
+
+    m = Basemap(projection="cyl",
+                llcrnrlon=llcrnrlon, urcrnrlon=urcrnrlon,
+                llcrnrlat=llcrnrlat, urcrnrlat=urcrnrlat,
+                resolution="l", ax=ax)
+
     m.drawcoastlines(linewidth=0.5)
-    m.drawmapboundary(fill_color='aqua', linewidth=0.5)
-    m.fillcontinents(color='coral',lake_color='aqua')
+    m.drawmapboundary(fill_color="aqua", linewidth=0.5)
+    m.fillcontinents(color="coral", lake_color="aqua")
 
     dec = 5
-    lon = lon[::dec]
-    lat = lat[::dec]
-    U = U[::dec, ::dec]
-    V = V[::dec, ::dec]
-    lon, lat, U, V = sanitize(lon, lat, U, V)
+    lon_dec = lon[::dec]
+    lat_dec = lat[::dec]
+    U_dec = U[::dec, ::dec]
+    V_dec = V[::dec, ::dec]
+    lon_dec, lat_dec, U_dec, V_dec = sanitize(lon_dec, lat_dec, U_dec, V_dec)
 
-    m.streamplot(lon, lat, U, V, latlon=True, color=U, linewidth=0.5, cmap='ocean', arrowsize=0.5)
+    m.streamplot(lon_dec, lat_dec, U_dec, V_dec,
+                 latlon=True, color=U_dec, linewidth=0.5,
+                 cmap="ocean", arrowsize=0.5)
 
-    m.plot(xx, yy, 'k:', linewidth=2, label='Optimal Path', latlon=True)
-    m.scatter([xx[0]], [yy[0]], c='g', label='Start', latlon=True)
-    m.scatter([xx[-1]], [yy[-1]], c='b', label='End', latlon=True)
-    
-    plt.legend()
+    # downsample route for plotting so dashes are not crowded
+    step = max(len(xx) // 200, 1)
+    xx_plot = xx[::step]
+    yy_plot = yy[::step]
+
+    m.plot(xx_plot, yy_plot,
+           color="k", linestyle="-", linewidth=2,
+           label="Optimal Path", latlon=True)
+
+    m.scatter([xx[0]], [yy[0]], c="g", label="Start",
+              latlon=True, zorder=5)
+    m.scatter([xx[-1]], [yy[-1]], c="b", label="End",
+              latlon=True, zorder=5)
+
+    plt.legend(loc="upper left")
     return fig
+
+
 
 def st_sidebar():
     boat_avg_speed = st.sidebar.number_input('Vessel Speed (m/s)', min_value=0.1, max_value=150.0, step=5.0, value=1.0)

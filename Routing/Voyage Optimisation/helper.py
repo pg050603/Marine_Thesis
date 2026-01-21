@@ -4,6 +4,8 @@ import numpy as np
 from math import pi
 import igraph as ig
 from global_land_mask import globe
+from pyproj import Geod  # add this
+
 
 def shortest_path(g, src, target):
     """
@@ -148,3 +150,108 @@ def get_distance(v1, v2):
     """
     return (np.linalg.norm(v1-v2))
 
+
+
+# WGS84 ellipsoid for geodesic calculations
+_geod = Geod(ellps="WGS84")
+
+
+def great_circle_route(start_coord, end_coord, num_points):
+    """
+    Generate intermediate points along the great-circle (distance-optimal) route.
+
+    Parameters
+    ----------
+    start_coord : tuple
+        (latitude, longitude) of start point (degrees)
+    end_coord : tuple
+        (latitude, longitude) of end point (degrees)
+    num_points : int
+        Number of points (including start and end) along the path.
+
+    Returns
+    -------
+    route_lons : np.ndarray
+        Longitudes of points along the great-circle route (degrees)
+    route_lats : np.ndarray
+        Latitudes of points along the great-circle route (degrees)
+    total_distance : float
+        Total great-circle distance in meters
+    """
+    start_lat, start_lon = start_coord
+    end_lat, end_lon = end_coord
+
+    # Total geodesic distance and forward azimuth
+    fwd_az, back_az, total_distance = _geod.inv(start_lon, start_lat, end_lon, end_lat)
+
+    # Fractions from 0 to 1
+    fractions = np.linspace(0.0, 1.0, num_points)
+
+    lats = []
+    lons = []
+
+    for frac in fractions:
+        d = total_distance * frac
+        lon_i, lat_i, _ = _geod.fwd(start_lon, start_lat, fwd_az, d)
+        lats.append(lat_i)
+        lons.append(lon_i)
+
+    return np.array(lons), np.array(lats), total_distance
+
+def densify_route(lons, lats, num_points):
+    """
+    Densify a polyline route (lon, lat arrays) into 'num_points' points,
+    interpolated along cumulative great-circle distance.
+    """
+    lons = np.asarray(lons)
+    lats = np.asarray(lats)
+
+    # cumulative distances along original route
+    cumdist = np.zeros(len(lons))
+    for i in range(1, len(lons)):
+        cumdist[i] = cumdist[i-1] + distance(lats[i-1], lons[i-1], lats[i], lons[i])
+
+    total_dist = cumdist[-1]
+    if total_dist == 0 or len(lons) < 2:
+        return lons, lats, total_dist
+
+    # target distances
+    target = np.linspace(0.0, total_dist, num_points)
+
+    new_lons = []
+    new_lats = []
+
+    for d in target:
+        j = np.searchsorted(cumdist, d)
+        if j == 0:
+            new_lons.append(lons[0])
+            new_lats.append(lats[0])
+        elif j >= len(cumdist):
+            new_lons.append(lons[-1])
+            new_lats.append(lats[-1])
+        else:
+            # fraction along segment [j-1, j]
+            frac = (d - cumdist[j-1]) / (cumdist[j] - cumdist[j-1])
+            lat1, lon1 = lats[j-1], lons[j-1]
+            lat2, lon2 = lats[j],   lons[j]
+
+            # interpolate along great-circle segment
+            seg_dist = cumdist[j] - cumdist[j-1]
+            bearing_ = bearing(lat1, lon1, lat2, lon2)
+            d_seg = seg_dist * frac
+
+            # simple forward step: same R and spherical formula as in distance()
+            R = 6.371e6
+            lat1r = lat1 * pi/180.0
+            lon1r = lon1 * pi/180.0
+            brg = bearing_
+
+            lat2r = np.arcsin(np.sin(lat1r)*np.cos(d_seg/R) +
+                              np.cos(lat1r)*np.sin(d_seg/R)*np.cos(brg))
+            lon2r = lon1r + np.arctan2(np.sin(brg)*np.sin(d_seg/R)*np.cos(lat1r),
+                                       np.cos(d_seg/R)-np.sin(lat1r)*np.sin(lat2r))
+
+            new_lats.append(lat2r*180.0/pi)
+            new_lons.append(lon2r*180.0/pi)
+
+    return np.array(new_lons), np.array(new_lats), total_dist
